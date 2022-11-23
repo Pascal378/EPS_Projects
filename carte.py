@@ -1,5 +1,11 @@
 run = True
-carte = {"Schnitzel": 1000, "Pommes": 200}
+carte = {"Cola": 100}
+
+with open('cart.txt') as f:
+    for line in f:
+        current = line.replace("\n", "")
+        item = current.split(":", 1)
+        carte.update({item[0]: item[1]})
 
 
 # Print the carte
@@ -19,11 +25,14 @@ def add_to_carte():
         return
 
     print("Preis des Gerichts:")
-    price = input()
-    if price == "b":
-        return
+    try:
+        price = input()
+        if price == "b":
+            return
+        price = int(price)
 
-    price = int(price)
+    except ValueError:
+        print("Nicht erlaubte Eingabe")
 
     carte.update({name: price})
 
@@ -42,4 +51,7 @@ while run:
     if userInput == "n":
         add_to_carte()
     if userInput == "e":
+        with open('cart.txt', 'w') as f:
+            for name, price in carte.items():
+                f.write('%s:%s\n' % (name, price))
         run = False
